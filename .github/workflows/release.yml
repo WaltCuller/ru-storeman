@@ -108,7 +108,7 @@ jobs:
 
       - name: Strip release binary (linux and macos)
         if: matrix.build == 'linux' || matrix.build == 'macos'
-        run: strip "target/${{ matrix.target }}/release/rustoreman"
+        run: strip "target/${{ matrix.target }}/release/ru_storeman"
 
       - name: Strip release binary (arm)
         if: matrix.build == 'linux-arm'
