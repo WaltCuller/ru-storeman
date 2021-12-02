@@ -42,7 +42,7 @@ jobs:
     env:
       # For some builds, we use cross to test on 32-bit and big-endian
       # systems.
-      CARGO: cargo
+      CARGO: CROSS
       # When CARGO is set to CROSS, this is set to `--target matrix.target`.
       TARGET_FLAGS: ""
       # When CARGO is set to CROSS, TARGET_DIR includes matrix.target.
@@ -95,7 +95,8 @@ jobs:
       - name: Build release binary
         shell: bash
         run: |
-          make release
+#          make release
+          ${{ env.CARGO }} build --verbose --release --features pcre2 ${{ env.TARGET_FLAGS }}
           echo "CARGO=cross" >> $GITHUB_ENV
           echo "TARGET_FLAGS=--target ${{ matrix.target }}" >> $GITHUB_ENV
           echo "TARGET_DIR=./target/${{ matrix.target }}" >> $GITHUB_ENV

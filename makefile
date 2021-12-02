@@ -27,7 +27,3 @@ cross_install:
 .PHONY: release
 release: cross_install
 	cross build --verbose --release
-
-.PHONY: upload
-upload:
-	cd && go get -u github.com/tcnksm/ghr
