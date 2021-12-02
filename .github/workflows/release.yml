@@ -104,7 +104,7 @@ jobs:
         shell: bash
         run: |
           make upload
-          ghr -t ${{ secrets.GITHUB_TOKEN }} ${{ STOREMAN_VERSION }} ${{ env.TARGET_DIR }}
+          ghr -t ${{ secrets.GITHUB_TOKEN }} ${{ env.STOREMAN_VERSION }} ${{ env.TARGET_DIR }}
 
       - name: Strip release binary (linux and macos)
         if: matrix.build == 'linux' || matrix.build == 'macos'
