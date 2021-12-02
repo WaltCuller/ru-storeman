@@ -19,12 +19,12 @@ jobs:
       - name: Get the release version from the tag
         shell: bash
         if: env.STOREMAN_VERSION == ''
-          run: |
-            #
-            # See: https://github.community/t5/GitHub-Actions/How-to-get-just-the-tag-name/m-p/32167/highlight/true#M1027
-            # 
-            echo "STOREMAN_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-            echo "version is: ${{ env.STOREMAN_VERSION }}"
+        run: |
+          #
+          # See: https://github.community/t5/GitHub-Actions/How-to-get-just-the-tag-name/m-p/32167/highlight/true#M1027
+          #
+          echo "STOREMAN_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "version is: ${{ env.STOREMAN_VERSION }}"
 
       - name: Create GitHub release
           id: release
@@ -95,16 +95,16 @@ jobs:
       - name: Build release binary
         shell: bash
         run: |
-        make release
-        echo "CARGO=cross" >> $GITHUB_ENV
-        echo "TARGET_FLAGS=--target ${{ matrix.target }}" >> $GITHUB_ENV
-        echo "TARGET_DIR=./target/${{ matrix.target }}" >> $GITHUB_ENV
+          make release
+          echo "CARGO=cross" >> $GITHUB_ENV
+          echo "TARGET_FLAGS=--target ${{ matrix.target }}" >> $GITHUB_ENV
+          echo "TARGET_DIR=./target/${{ matrix.target }}" >> $GITHUB_ENV
 
       - name: Release archive
         shell: bash
         run: |
-        make upload
-        ghr -t ${{ secrets.GITHUB_TOKEN }} ${{ STOREMAN_VERSION }} ${{ env.TARGET_DIR }}
+          make upload
+          ghr -t ${{ secrets.GITHUB_TOKEN }} ${{ STOREMAN_VERSION }} ${{ env.TARGET_DIR }}
 
       - name: Strip release binary (linux and macos)
         if: matrix.build == 'linux' || matrix.build == 'macos'
