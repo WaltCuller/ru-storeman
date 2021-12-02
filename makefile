@@ -1,5 +1,4 @@
 
-
 # Runs clippy on the sources
 .PHONY: check
 check:
@@ -31,4 +30,4 @@ release: cross_install
 
 .PHONY: upload
 upload:
-	cd && go install github.com/tcnksm/ghr
+	cd && go get -u github.com/tcnksm/ghr
