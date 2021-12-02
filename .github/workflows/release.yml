@@ -94,12 +94,11 @@ jobs:
       - name: Build release binary
         shell: bash
         run: |
-          cargo install cross
-          cross build --verbose --release ${{ env.TARGET_FLAGS }}
           echo "CARGO=cross" >> $GITHUB_ENV
           echo "TARGET_FLAGS=--target ${{ matrix.target }}" >> $GITHUB_ENV
           echo "TARGET_DIR=./target/${{ matrix.target }}" >> $GITHUB_ENV
-
+          cargo install cross
+          cross build --verbose --release ${{ env.TARGET_FLAGS }}
       - name: Strip release binary (linux and macos)
         if: matrix.build == 'linux' || matrix.build == 'macos'
         run: strip "target/${{ matrix.target }}/release/rustoreman"
