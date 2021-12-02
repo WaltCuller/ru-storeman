@@ -27,13 +27,13 @@ jobs:
           echo "version is: ${{ env.STOREMAN_VERSION }}"
 
       - name: Create GitHub release
-          id: release
-          uses: actions/create-release@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            tag_name: ${{ env.STOREMAN_VERSION }}
-            release_name: ${{ env.STOREMAN_VERSION }}
+        id: release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.STOREMAN_VERSION }}
+          release_name: ${{ env.STOREMAN_VERSION }}
 
   build-release:
     name: build-release
