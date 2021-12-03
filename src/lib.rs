@@ -1,5 +1,7 @@
 pub mod fn_help;
 pub mod fn_version;
+pub mod fn_start;
+pub mod signal;
 
 use std::env;
 
