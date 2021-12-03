@@ -9,7 +9,7 @@ edition = "2021"
 [dependencies]
 log = "0.4.8"
 structopt = "0.3.25"
-
+signal-hook = "0.3.10"
 
 [profile]
     [profile.dev]
