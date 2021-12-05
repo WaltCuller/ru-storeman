@@ -10,6 +10,7 @@ edition = "2021"
 log = "0.4.8"
 structopt = "0.3.25"
 signal-hook = "0.3.10"
+crossbeam-channel = "0.5.1"
 
 [profile]
     [profile.dev]
