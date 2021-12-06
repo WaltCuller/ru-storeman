@@ -1,5 +1,3 @@
-
-
 pub fn help() -> &'static str {
     "
 Tasks:
@@ -17,7 +15,5 @@ Tasks:
                                        status
   storeman start [PROCESS]            # Start the application
   storeman version                    # Display ru-storeman version
-
-Options:
     "
 }
