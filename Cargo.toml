@@ -7,22 +7,24 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-log = "0.4.8"
+log = { version = "0.4.8", features = ["max_level_debug", "release_max_level_warn"] }
+pretty_env_logger = "0.4.0"
 structopt = "0.3.25"
 signal-hook = "0.3.10"
 crossbeam-channel = "0.5.1"
+nix = "0.23.0"
 
 [profile]
-    [profile.dev]
-        opt-level = 0
+[profile.dev]
+opt-level = 0
 
-    [profile.release]
-        codegen-units = 1
-        debug = false
-        debug-assertions = false
-        incremental = false
-        lto = true
-        opt-level = 3
-        overflow-checks = false
-        panic = "abort"
+[profile.release]
+codegen-units = 1
+debug = false
+debug-assertions = false
+incremental = false
+lto = true
+opt-level = 3
+overflow-checks = false
+panic = "abort"
 
