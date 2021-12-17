@@ -1,12 +1,13 @@
 use std::os::raw::c_int;
-use std::process;
+use std::process::{self, Child};
 use std::process::Stdio;
 use std::thread;
 
 use crossbeam_channel::{Receiver, select};
-use nix::libc::pid_t;
+use nix::libc::{pid_t, signal};
 use nix::sys::signal::{self, Signal};
 use nix::unistd::Pid;
+use signal_hook::consts::*;
 
 pub fn start(rx: Receiver<c_int>) {
     let cmd = Procfile {
@@ -48,35 +49,36 @@ struct Procfile {
 
 fn start_procs(rx: Receiver<c_int>, info: ProcInfo, exit_on_error: bool) {
     let mut pid: u32 = 0;
-    thread::spawn(move || {
-        let mut child = process::Command::new("go").
-            stdout(Stdio::inherit()).
-            stderr(Stdio::inherit()).
-            stdin(Stdio::null()).
-            args(["run", "web.go"]).
-            spawn().expect("test?");
-        pid = child.id();
-        let pgid = u32_to_pgid(pid);
-        println!("in pid {}", pid);
-        println!("in pgid {}", pgid);
-        signal::killpg(Pid::from_raw(u32_to_pgid(pid)), Signal::SIGKILL);
-        println!("finish")
-    });
+
     thread::spawn(|| {
-        process::Command::new("pwd").
+        process::Command::new("/bin/sh").
+            arg("-c").arg("echo hello").
             stdout(Stdio::inherit()).
             stderr(Stdio::inherit()).
-            stdin(Stdio::null()).
-            output().expect("pwd");
+            stdin(Stdio::null()).spawn().
+            expect("pwd");
     });
+
+    let ot = thread::spawn(move || -> Child {
+        let mut child = process::Command::new("/bin/sh").
+            arg("-c").arg("go run web.go").
+            stdout(Stdio::inherit()).
+            stderr(Stdio::inherit()).
+            stdin(Stdio::null()).spawn().
+            expect("test?");
+        return child;
+    });
+
+    let mut res = ot.join().expect("");
 
     loop {
         println!("in loop");
         select! {
-            recv(rx) -> _ => {
-                let pgid = u32_to_pid(pid);
-                println!("kill {}", pid);
-                println!("pgid {}", pgid);
+            recv(rx) -> c => {
+                println!("signal: {}", c.unwrap());
+                println!("pid {}", res.id());
+                res.kill().expect("????");
+                println!("finish")
             },
         }
     }
