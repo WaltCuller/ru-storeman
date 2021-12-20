@@ -1,3 +1,5 @@
+use std::any::Any;
+use std::fmt::Debug;
 use std::os::raw::c_int;
 use std::process::{self, Child};
 use std::process::Stdio;
@@ -61,15 +63,26 @@ fn start_procs(rx: Receiver<c_int>, info: ProcInfo, exit_on_error: bool) {
 
     let ot = thread::spawn(move || -> Child {
         let mut child = process::Command::new("/bin/sh").
-            arg("-c").arg("go run web.go").
+            arg("-c").arg("go run web.go -a :8090").
+            arg("-a").arg(":8090").
             stdout(Stdio::inherit()).
             stderr(Stdio::inherit()).
             stdin(Stdio::null()).spawn().
             expect("test?");
+        child.wait();
         return child;
     });
 
+    let ot2 = thread::spawn(move || -> Child {
+        process::Command::new("/bin/sh").
+            arg("-c").arg("go run web.go -a :9090").
+            stdout(Stdio::inherit()).
+            stderr(Stdio::inherit()).
+            stdin(Stdio::null()).spawn().expect("")
+    });
+
     let mut res = ot.join().expect("");
+    let mut res2 = ot2.join().expect("");
 
     loop {
         println!("in loop");
